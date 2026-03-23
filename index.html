@@ -1,0 +1,303 @@
+<index.html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baja Pro Services | Premium Solar Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --emerald-medium: #059669;
+            --emerald-dark: #064e3b;
+            --aqua-premium: #f0fdfa;
+        }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: var(--aqua-premium);
+            color: #1e293b;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(5, 150, 105, 0.1);
+            border-radius: 24px;
+        }
+        .btn-emerald {
+            background-color: var(--emerald-medium);
+            transition: all 0.3s ease;
+        }
+        .btn-emerald:hover {
+            background-color: var(--emerald-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(5, 150, 105, 0.2);
+        }
+        #auth-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            background: linear-gradient(135deg, #064e3b 0%, #059669 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .hidden-section { display: none; }
+        .active-section { display: block; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div id="auth-overlay">
+        <div class="bg-white p-8 md:p-12 rounded-[2rem] shadow-2xl max-w-md w-full mx-4">
+            <div class="text-center mb-8">
+                <div class="w-20 h-20 bg-emerald-100 rounded-3xl flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-solar-panel text-emerald-600 text-3xl"></i>
+                </div>
+                <h2 class="text-3xl font-black text-emerald-950">Acceso Premium</h2>
+                <p class="text-slate-500 mt-2">Ingrese sus datos para desbloquear el catálogo y las herramientas de cálculo.</p>
+            </div>
+            <form id="loginForm" class="space-y-4">
+                <input type="text" id="uName" placeholder="Nombre Completo" required class="w-full p-4 rounded-xl bg-slate-50 border border-slate-200 outline-none focus:ring-2 ring-emerald-500">
+                <input type="tel" id="uPhone" placeholder="WhatsApp (10 dígitos)" required class="w-full p-4 rounded-xl bg-slate-50 border border-slate-200 outline-none focus:ring-2 ring-emerald-500">
+                <input type="text" id="uAddress" placeholder="Dirección y Código Postal" required class="w-full p-4 rounded-xl bg-slate-50 border border-slate-200 outline-none focus:ring-2 ring-emerald-500">
+                <button type="submit" class="w-full btn-emerald text-white font-bold py-4 rounded-xl text-lg shadow-lg">Entrar al Portal</button>
+            </form>
+        </div>
+    </div>
+
+    <nav class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-emerald-50 py-4 px-6">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <span class="font-extrabold text-2xl tracking-tighter text-emerald-900">BAJA PRO <span class="text-emerald-500 font-light">SERVICES</span></span>
+            </div>
+            <div class="hidden md:flex gap-6 font-bold text-emerald-800">
+                <button onclick="showPage('catalog-page')" class="hover:text-emerald-500">Catálogo</button>
+                <button onclick="showPage('calc-energy-page')" class="hover:text-emerald-500">Consumo</button>
+                <button onclick="showPage('calc-price-page')" class="hover:text-emerald-500">Cotizador</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-4 py-12">
+        
+        <section id="catalog-page" class="active-section">
+            <div class="mb-10">
+                <h1 class="text-4xl font-black text-emerald-950">Equipos de Alta Eficiencia</h1>
+                <p class="text-emerald-600">Precios actualizados con 10% de descuento incluido.</p>
+            </div>
+            <div id="product-grid" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                </div>
+        </section>
+
+        <section id="calc-energy-page" class="hidden-section">
+            <div class="max-w-4xl mx-auto">
+                <div class="glass-card p-8 shadow-xl">
+                    <h2 class="text-2xl font-black mb-6 text-emerald-900"><i class="fas fa-plug mr-2"></i>Calculadora de Consumo Diario</h2>
+                    <p class="mb-6 text-slate-500">Seleccione sus aparatos o agregue manualmente para obtener una sugerencia de sistema.</p>
+                    
+                    <div id="appliance-container" class="space-y-4">
+                        </div>
+
+                    <div class="mt-8 flex gap-4">
+                        <button onclick="addApplianceRow()" class="flex-1 border-2 border-dashed border-emerald-200 py-3 rounded-xl text-emerald-600 font-bold hover:bg-emerald-50">+ Agregar Manual</button>
+                        <select onchange="addPresetAppliance(this)" class="flex-1 p-3 rounded-xl border border-emerald-100 bg-white font-bold text-emerald-800">
+                            <option value="">Añadir desde Lista ↓</option>
+                            <option value="600|Refrigerador">Refrigerador (600W)</option>
+                            <option value="1500|Aire Acondicionado 1T">A/C 1 Ton (1500W)</option>
+                            <option value="2000|Microondas">Microondas (2000W)</option>
+                            <option value="100|Televisor LED">TV LED (100W)</option>
+                            <option value="500|Lavadora">Lavadora (500W)</option>
+                            <option value="1200|Cafetera">Cafetera (1200W)</option>
+                        </select>
+                    </div>
+
+                    <div class="mt-10 p-8 bg-emerald-900 rounded-3xl text-white flex flex-col md:flex-row justify-between items-center">
+                        <div>
+                            <p class="text-emerald-300 font-bold uppercase text-xs tracking-widest">Consumo Total</p>
+                            <p id="totalEnergyDisplay" class="text-5xl font-black">0 <span class="text-xl">Wh/Día</span></p>
+                        </div>
+                        <div class="mt-6 md:mt-0 text-right">
+                            <p class="text-emerald-300 font-bold text-xs uppercase">Sugerencia Pro</p>
+                            <p id="suggestionText" class="text-lg font-bold italic">Esperando datos...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="calc-price-page" class="hidden-section">
+            <div class="glass-card p-8 shadow-xl max-w-5xl mx-auto">
+                <h2 class="text-2xl font-black mb-8 text-emerald-900"><i class="fas fa-shopping-cart mr-2"></i>Cotizador de Accesorios</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="text-emerald-700 border-b border-emerald-100">
+                                <th class="pb-4">Producto</th>
+                                <th class="pb-4">Precio Lista</th>
+                                <th class="pb-4" width="150">Cantidad</th>
+                                <th class="pb-4 text-right">Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody id="price-table-body">
+                            </tbody>
+                    </table>
+                </div>
+                <div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="p-6 bg-emerald-50 rounded-2xl border border-emerald-100">
+                        <p class="text-sm font-bold text-emerald-600">Capacidad Estimada</p>
+                        <p id="totalPower" class="text-4xl font-black text-emerald-900">0.00 kW</p>
+                    </div>
+                    <div class="p-6 bg-emerald-600 rounded-2xl text-white shadow-xl">
+                        <p class="text-sm font-bold text-emerald-100">Inversión Final (IVA inc)</p>
+                        <p id="totalFinalPrice" class="text-4xl font-black">$0.00</p>
+                        <button onclick="sendToWhatsApp()" class="mt-4 w-full bg-white text-emerald-700 py-3 rounded-xl font-black hover:bg-emerald-50 transition-all uppercase tracking-tighter">Enviar por WhatsApp</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // THE COMPLETE PRODUCT DATABASE
+        const PRODUCTS = [
+            { name: "Sol-Ark 30kW 3F Industrial", price: 475629, cat: "Inversores", img: "Sol-Ark-30kW-3F-Industrial.png", power: 30000 },
+            { name: "Sol-Ark 15kW + 4x LiFePO4 20kWh", price: 298643, cat: "Kits", img: "Sol-Ark-15kW-4x-LiFePO4-20kWh.png", power: 15000 },
+            { name: "KITHYBRID 8kW Híbrido", price: 247853, cat: "Inversores", img: "KITHYBRID-8kW-Hibrido.png", power: 8000 },
+            { name: "Sol-Ark 15kW 48V-220V", price: 201164, cat: "Inversores", img: "Sol-Ark-15kW-48V-220V.png", power: 15000 },
+            { name: "Sol-Ark 12kW 2F", price: 171309, cat: "Inversores", img: "Sol-Ark-12kW-2F.png", power: 12000 },
+            { name: "Lux Power 12kW + 3x LiFePO4", price: 163995, cat: "Kits", img: "Lux-Power-12kW-3x-LiFePO4.png", power: 12000 },
+            { name: "Sol-Ark 8kW 48V", price: 124108, cat: "Inversores", img: "Sol-Ark-8kW-48V.png", power: 8000 },
+            { name: "Pytes E-Box 48V 11.7kWh", price: 64344, cat: "Baterías", img: "Pytes-E-Box-48V-11.7kWh.png", power: 0 },
+            { name: "RES200 10kW Híbrido", price: 59632, cat: "Inversores", img: "RES200-10kW-Hibrido.png", power: 10000 },
+            { name: "Growatt SPF 6kW", price: 57426, cat: "Inversores", img: "Growatt-SPF-6kW.png", power: 6000 },
+            { name: "Pytes E-Box 48V 5.1kWh", price: 35757, cat: "Baterías", img: "Pytes-E-Box-48V-5.1kWh.png", power: 0 },
+            { name: "EPEVER EBOX 100Ah", price: 35757, cat: "Baterías", img: "EPEVER-EBOX-100Ah.png", power: 0 },
+            { name: "AXE 5.0kW Híbrido", price: 35420, cat: "Inversores", img: "AXE-5.0kW-Hibrido.png", power: 5000 },
+            { name: "Ruiye RLB 10kWh PRO", price: 28155, cat: "Baterías", img: "Ruiye-RLB-10kWh-PRO.png", power: 0 },
+            { name: "Must PV 48V 5.1kWh", price: 27630, cat: "Baterías", img: "Must-PV-48V-5.1kWh.png", power: 0 },
+            { name: "RES100 5kW", price: 26658, cat: "Inversores", img: "RES100-5kW.png", power: 5000 },
+            { name: "Growatt SPF 3kW 48V", price: 23200, cat: "Inversores", img: "Growatt-SPF-3kW-48V.png", power: 3000 },
+            { name: "Ruiye RLB 10kWh MAX", price: 22055, cat: "Baterías", img: "Ruiye-RLB-10kWh-MAX.png", power: 0 },
+            { name: "Growatt 3kW 110V", price: 18805, cat: "Inversores", img: "Growatt-3kW-110V.png", power: 3000 },
+            { name: "Kit Vektor 8 Paneles", price: 12973, cat: "Kits", img: "Kit-Vektor-8-Paneles.png", power: 4400 },
+            { name: "Panel 700W Longi", price: 6015, cat: "Paneles", img: "Panel-700W-Longi.png", power: 700 },
+            { name: "Panel EPL 540W", price: 5936, cat: "Paneles", img: "Panel-EPL-540W.png", power: 540 },
+            { name: "Panel EPL 450W", price: 4810, cat: "Paneles", img: "Panel-EPL-450W.png", power: 450 },
+            { name: "Microinversor PL16", price: 3685, cat: "Micro", img: "Microinversor-PL16.png", power: 1600 }
+        ];
+
+        let lead = {};
+
+        // 1. LOGIN
+        document.getElementById('loginForm').onsubmit = (e) => {
+            e.preventDefault();
+            lead = {
+                name: document.getElementById('uName').value,
+                phone: document.getElementById('uPhone').value,
+                address: document.getElementById('uAddress').value
+            };
+            document.getElementById('auth-overlay').style.display = 'none';
+            init();
+        };
+
+        function showPage(id) {
+            document.querySelectorAll('section').forEach(s => s.className = 'hidden-section');
+            document.getElementById(id).className = 'active-section';
+        }
+
+        // 2. CATALOG RENDER
+        function renderCatalog() {
+            const grid = document.getElementById('product-grid');
+            grid.innerHTML = PRODUCTS.map(p => `
+                <div class="glass-card p-6 flex flex-col hover:shadow-2xl transition-all">
+                    <div class="h-40 bg-slate-50 rounded-xl mb-4 flex items-center justify-center p-4">
+                        <img src="img/${p.img}" class="max-h-full" onerror="this.src='https://via.placeholder.com/150?text=Solar'">
+                    </div>
+                    <span class="text-[10px] font-extrabold uppercase text-emerald-600 bg-emerald-50 px-2 py-1 rounded w-max">${p.cat}</span>
+                    <h3 class="font-bold text-slate-800 mt-2 h-12 leading-tight">${p.name}</h3>
+                    <div class="mt-4 pt-4 border-t border-slate-100 flex justify-between items-center">
+                        <span class="text-xl font-black text-emerald-700">$${(p.price * 0.9).toLocaleString()}</span>
+                        <button onclick="showPage('calc-price-page')" class="text-emerald-500"><i class="fas fa-plus-circle text-2xl"></i></button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 3. ENERGY CALC
+        function addApplianceRow(w = '', n = '') {
+            const container = document.getElementById('appliance-container');
+            const div = document.createElement('div');
+            div.className = "grid grid-cols-1 md:grid-cols-4 gap-3 bg-white p-4 rounded-2xl border border-emerald-50 shadow-sm";
+            div.innerHTML = `
+                <input type="text" value="${n}" placeholder="Aparato" class="p-3 rounded-lg border border-slate-200">
+                <input type="number" value="${w}" placeholder="Watts" class="p-3 rounded-lg border border-slate-200 val-w" oninput="updateEnergy()">
+                <input type="number" placeholder="Cant." class="p-3 rounded-lg border border-slate-200 val-q" oninput="updateEnergy()">
+                <div class="flex gap-2">
+                    <input type="number" placeholder="Hrs/Día" class="p-3 rounded-lg border border-slate-200 w-full val-h" oninput="updateEnergy()">
+                    <button onclick="this.parentElement.parentElement.remove(); updateEnergy();" class="text-red-400 px-2"><i class="fas fa-trash"></i></button>
+                </div>
+            `;
+            container.appendChild(div);
+        }
+
+        function addPresetAppliance(sel) {
+            if (!sel.value) return;
+            const [w, n] = sel.value.split('|');
+            addApplianceRow(w, n);
+            sel.value = '';
+        }
+
+        function updateEnergy() {
+            let total = 0;
+            const ws = document.querySelectorAll('.val-w'), qs = document.querySelectorAll('.val-q'), hs = document.querySelectorAll('.val-h');
+            ws.forEach((w, i) => total += (w.value * qs[i].value * hs[i].value));
+            document.getElementById('totalEnergyDisplay').innerHTML = `${total.toLocaleString()} <span class="text-xl">Wh/Día</span>`;
+            
+            let sug = "Agregue datos...";
+            if (total > 0 && total < 5000) sug = "Recomendamos Kit Vektor 8 Paneles.";
+            else if (total >= 5000 && total < 15000) sug = "Recomendamos Growatt 6kW + Batería Pytes.";
+            else if (total >= 15000) sug = "Recomendamos Sistema Sol-Ark 15kW Industrial.";
+            document.getElementById('suggestionText').innerText = sug;
+        }
+
+        // 4. PRICE CALC
+        function renderPriceTable() {
+            const body = document.getElementById('price-table-body');
+            body.innerHTML = PRODUCTS.map((p, i) => `
+                <tr class="border-b border-emerald-50">
+                    <td class="py-4 font-bold text-slate-700">${p.name}</td>
+                    <td class="py-4 text-emerald-600 font-bold">$${p.price.toLocaleString()}</td>
+                    <td class="py-4"><input type="number" min="0" value="0" class="w-20 p-2 rounded-lg border p-qty" data-idx="${i}" oninput="updatePriceTotal()"></td>
+                    <td class="py-4 text-right font-black text-emerald-900 p-sub">$0</td>
+                </tr>
+            `).join('');
+        }
+
+        function updatePriceTotal() {
+            let totalP = 0, totalW = 0;
+            const qtys = document.querySelectorAll('.p-qty'), subs = document.querySelectorAll('.p-sub');
+            qtys.forEach((q, i) => {
+                const sub = q.value * PRODUCTS[i].price;
+                subs[i].innerText = "$" + sub.toLocaleString();
+                totalP += sub;
+                totalW += q.value * PRODUCTS[i].power;
+            });
+            document.getElementById('totalPower').innerText = (totalW / 1000).toFixed(2) + " kW";
+            document.getElementById('totalFinalPrice').innerText = "$" + totalP.toLocaleString();
+        }
+
+        function sendToWhatsApp() {
+            const price = document.getElementById('totalFinalPrice').innerText;
+            const msg = `Hola! Soy ${lead.name}. He cotizado un sistema de ${price} en el portal BAJA PRO. Mi domicilio es ${lead.address}. ¿Podemos validar existencias?`;
+            window.open(`https://wa.me/5216122198325?text=${encodeURIComponent(msg)}`);
+        }
+
+        function init() {
+            renderCatalog();
+            renderPriceTable();
+        }
+    </script>
+</body>
+</html>
